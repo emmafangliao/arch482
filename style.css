@@ -32,3 +32,9 @@ img {
 	height: 200px;
 
 }
+
+/*CONTACT PAGE*/
+.col-md-offset-3 {
+	background-color:rgba(50, 50, 50, 0.7);
+	border-radius: 2%;
+}
