@@ -22,7 +22,7 @@
   			</div>
 	  		<div class="collapse navbar-collapse" id="bs-nav-demo">
 	    		<ul class="nav navbar-nav">	    			
-	      			<li class="active"><a href="browse.html">Browse</a></li>
+	      			<li class="active"><a href="browse.php">Browse</a></li>
 	      			<li><a href="post.html">Post</a></li>
 	      			<li><a href="message.html">Message a Meme Creator</a></li>
 	      			<li><a href="#">Contact</a></li>
@@ -49,8 +49,9 @@
     	//echo file_get_contents($file);
 		//$file = 'http://students.washington.edu/liaofang/arch482/capstone/uploads/';
 		//echo file_get_contents($file);
-		
-     $files = glob("uploads/");
+	
+	
+     $files = glob("uploads/*.*");
      for ($i=0; $i<count($files); $i++) {
         $image = $files[$i];
         $supported_file = array(
@@ -62,7 +63,13 @@
 
         $image = $files[$i];
         print $image ."<br>";
-    	echo '<img src="'.$image.'" /><br />';
+        echo "Name: ". $name ."<br>";
+    	echo "Email: ". $email ."<br>";
+    	echo '<img src="'.$image.'" style="width:400px;height:400px;"></img>';
+    }
+    
+    
+    
 ?>
 </body>
 </html>
