@@ -34,6 +34,7 @@
 	  		</div>
 	  	</div>
 	</nav>
+
 <?php 
 		//$remoteImage = 'uploads';
 		//$imginfo = getimagesize($remoteImage);
@@ -52,6 +53,15 @@
 	
 	
      $files = glob("uploads/*.*");
+     
+     //function myFunction() {
+    //		  	if ($link ->query($q2) === TRUE) {
+   // 				echo "Record updated successfully";
+//				} else {
+  //  				echo "Error updating record: " . $link->error;
+//				}
+ //    }
+    	
      for ($i=0; $i<count($files); $i++) {
         $image = $files[$i];
         $supported_file = array(
@@ -69,7 +79,7 @@
     	//if ($link->connect_errno) {
     	//	die("Connection failed: " . $mylink->connect_error);
 		//} else {
-			print"Connection successful.";
+		//	print"Connection successful.";
 		//}
 		$path = substr($image,8);
 		//echo $path;
@@ -77,17 +87,45 @@
 		
 		$result = $link->query($q);
 		if ($result->num_rows > 0) {
-		while($row = $result->fetch_assoc()) {
-			
-        	echo "Name: ". $row["name"] ."<br>";
-    		echo "Email: ". $row["email"] ."<br>";
+			while($row = $result->fetch_assoc()) {
+				echo "Name: ". $row["name"] ."<br>";
+    			echo "Email: ". $row["email"] ."<br>";
+    		}
     	}
-    	}
-    		echo '<img src="'.$image.'" style="width:400px;height:400px;"></img>';
+    	echo '<img src="'.$image.'" style="width:400px;height:400px;"></img>';
+    	
+		
+    	echo '<img onclick="myFunction()" src="heart-unclicked.png" style="width:50px;height:50px;">like</img>';
+    	// echo '<script>
+//     		function helloooo() {
+//     		alert("Heart was clicked");
+//     		}
+//     		</script>';
+
+		echo '<script>
+				function myFunction() {
+					$.ajax({
+						type: "POST",
+						data: { name: $("select[image_path="$path"]").val()},
+						success:function( msg ) {
+							alert("Data Saved: " + msg);
+						}
+					});
+				}
+			  </script>';
+		
+		
+    	$q2 = "UPDATE meme_information SET likes=likes+1 WHERE image_path= \"$path\" ";
+    	//$result = $link->query($q2);
+    	
+    	
+    		  
+    	
+    	echo $path;
+    	
     }
-    
-    
-    
+    	    		    
 ?>
 </body>
 </html>
+
