@@ -62,10 +62,28 @@
          );
 
         $image = $files[$i];
-        print $image ."<br>";
-        echo "Name: ". $name ."<br>";
-    	echo "Email: ". $email ."<br>";
-    	echo '<img src="'.$image.'" style="width:400px;height:400px;"></img>';
+        //print $image ."<br>";
+        global $link;
+    	include("dbconnect.php");
+    	$link = new mysqli($server,$user,$password,$dbname);
+    	//if ($link->connect_errno) {
+    	//	die("Connection failed: " . $mylink->connect_error);
+		//} else {
+			print"Connection successful.";
+		//}
+		$path = substr($image,8);
+		//echo $path;
+		$q = "SELECT name, email FROM meme_information WHERE image_path= \"$path\"";
+		
+		$result = $link->query($q);
+		if ($result->num_rows > 0) {
+		while($row = $result->fetch_assoc()) {
+			
+        	echo "Name: ". $row["name"] ."<br>";
+    		echo "Email: ". $row["email"] ."<br>";
+    	}
+    	}
+    		echo '<img src="'.$image.'" style="width:400px;height:400px;"></img>';
     }
     
     
