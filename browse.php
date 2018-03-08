@@ -34,6 +34,11 @@
 	  		</div>
 	  	</div>
 	</nav>
+	<input class="button" type="submit" name="button" value="enter"/>
+	<script> if(document.getElementById('button').clicked==true) {
+							alert("button was clicked");
+	} </script>
+	
 
 <?php 
 		//$remoteImage = 'uploads';
@@ -54,13 +59,11 @@
 	
      $files = glob("uploads/*.*");
      
-     //function myFunction() {
-    //		  	if ($link ->query($q2) === TRUE) {
-   // 				echo "Record updated successfully";
-//				} else {
-  //  				echo "Error updating record: " . $link->error;
-//				}
- //    }
+     function myFunction() {
+    	  	$results = $link ->query($q2);
+   			echo "Record updated successfully";
+			
+     }
     	
      for ($i=0; $i<count($files); $i++) {
         $image = $files[$i];
@@ -95,30 +98,50 @@
     	echo '<img src="'.$image.'" style="width:400px;height:400px;"></img>';
     	
 		
-    	echo '<img onclick="myFunction()" src="heart-unclicked.png" style="width:50px;height:50px;">like</img>';
+    	//echo '<img id="click" src="heart-unclicked.png" style="width:50px;height:50px;">like</img>';
+    	//echo '<p id="demo">Click me.</p>';
+    	// echo '<html> <body> <script> document.getElementById("demo").onclick = function() {myFunction()}; </script></body> </html>';
     	// echo '<script>
 //     		function helloooo() {
 //     		alert("Heart was clicked");
 //     		}
 //     		</script>';
 
-		echo '<script>
-				function myFunction() {
-					$.ajax({
-						type: "POST",
-						data: { name: $("select[image_path="$path"]").val()},
-						success:function( msg ) {
-							alert("Data Saved: " + msg);
-						}
-					});
-				}
-			  </script>';
-		
-		
+		// echo '<script>
+// 				function myFunction() {
+// 					$.ajax({
+// 						type: "POST",
+// 						data: { name: $("select[image_path="$path"]").val()},
+// 						success:function( msg ) {
+// 							alert("Data Saved: " + msg);
+// 						}
+// 					});
+// 				}
+// 			  </script>';
+// 		
+		echo '<input class="button" type="submit" name="button" value="enter"/>';
     	$q2 = "UPDATE meme_information SET likes=likes+1 WHERE image_path= \"$path\" ";
-    	//$result = $link->query($q2);
+    	$lol=0;
     	
-    	
+    	echo '<script> if(document.querySelector(\'.button\').clicked==true) {
+							alert("button was clicked");
+							} </script>';
+		echo $lol;
+    	if(lol ==1){
+    		$results = $link ->query($q2);
+    	}
+    	echo '<button id="myBtn">Try it</button>';
+
+		echo '<script>
+			document.getElementById("myBtn").addEventListener("click", function(){
+    		f1();
+			});
+			
+			function f1(){
+				$results = $link ->query($q2);
+				}
+				
+		</script>';
     		  
     	
     	echo $path;
