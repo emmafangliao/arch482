@@ -7,6 +7,10 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+	<style>
+	p{text-align: center;}
+	div.heart{position: relative; left: 330px;}
+    </style>
 </head>
 <body class>
 	<nav class="navbar navbar-inverse">
@@ -34,8 +38,10 @@
 	  		</div>
 	  	</div>
 	</nav>
+	
+		   
 <?php 
-	include("dbconnect.php");
+	include("connecttodb.php");
 	
     $files = glob("uploads/*.*");
     	
@@ -50,38 +56,58 @@
         $image = $files[$i];
 		$path = substr($image,8);
 		echo '<img src="'.$image.'" style="width:400px;height:400px;"></img>';
-		$q = "SELECT name, email, id FROM meme_information WHERE image_path= \"$path\"";
+		$q = "SELECT name, email, id, likes FROM meme_information WHERE image_path= \"$path\"";
 		
-		$id = 0;
+		$id=0;
 		$result = $link->query($q);
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
-				echo "Name: ". $row["name"] ."<br>";
-    			echo "Email: ". $row["email"] ."<br>";
-    			echo "Id: ". $row["id"] . "<br>";
-    			$id = $row["id"];
-    			echo '<img onclick="myFunction('.$id.')" src="heart-unclicked.png" style="width:50px;height:50px;">like</img>';
-    		}
-    	}
-    	
-    	//echo '<img onclick="myFunction()" src="heart-unclicked.png" style="width:50px;height:50px;">like</img>';
-    	//echo "random" . $_POST['id']. "<br>";
-		echo
-		    '<script>
+				$id = $row["id"];
+				echo '<div class = "container">
+						<div class = "row">
+							<div class = "col-md-12">
+								<img id="'.$id.'" onclick="myFunction('.$id.')" src="heart-unclicked.png" style="width:50px;height:50px;align:right; position: relative; left: 150px;"></img>
+
+				
+    			<a href="mailto:" ' .$row["email"]. '  "?Subject=Hello%20I%20Love%20Your%20Meme" target="_top">
+    			<img src="email_icon.png" style="width:50px;height:40px;align:right;position: relative;">
+    			</a>';
+    			
+    			echo "<p style=\"align: right;position: relative; left: 150px;\">".$row["likes"]."</p>";
+				echo "<p> Name: ". $row["name"] ."</p>";
+    			echo "<p> Email: ". $row["email"] ."</p>";
+    			
+    			END;
+    			
+    			//echo "Id: ". $row["id"] . "<br>";
+    				
+
+    			
+    			//echo $id;
+    			
+    			
+    			echo ' <script>
 				function myFunction(id) {
 					$.ajax({
 						type: "POST",
 						url: "update_likes.php",
 						data: {"increment_by": 1,"id": id},
 						success: function() {
-							alert("works");
+						document.getElementById(id).src="heart-clicked.png";
 						},
 						error: function() {
 							alert("doesnt work");
 						},
 					});
 				}
-			</script>';	  
+				</script>';
+    		}
+    	}
+    		
+		
+		
+
+		  
     }
     	    		    
 ?>
