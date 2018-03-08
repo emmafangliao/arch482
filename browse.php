@@ -6,9 +6,9 @@
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
 </head>
 <body class>
-
 	<nav class="navbar navbar-inverse">
 		<div class="container">
 			<div class="navbar-header">
@@ -34,95 +34,61 @@
 	  		</div>
 	  	</div>
 	</nav>
-
 <?php 
-		//$remoteImage = 'uploads';
-		//$imginfo = getimagesize($remoteImage);
-		//header("Content-type: {$imginfo['']}");
-		//readfile($remoteImage);
-		//$targetFile = "uploads/";
-		//$targetFile = $targetFile . basename($_FILES["image"]["name"]);
-		
-		//$file = 'your_images.jpg';
-
-    	//header('Content-Type: image/jpeg');
-    	//header('Content-Length: ' . filesize($file));
-    	//echo file_get_contents($file);
-		//$file = 'http://students.washington.edu/liaofang/arch482/capstone/uploads/';
-		//echo file_get_contents($file);
+	include("connecttodb.php");
 	
-	
-     $files = glob("uploads/*.*");
-     
-     //function myFunction() {
-    //		  	if ($link ->query($q2) === TRUE) {
-   // 				echo "Record updated successfully";
-//				} else {
-  //  				echo "Error updating record: " . $link->error;
-//				}
- //    }
+    $files = glob("uploads/*.*");
     	
-     for ($i=0; $i<count($files); $i++) {
+    for ($i=0; $i<count($files); $i++) {
         $image = $files[$i];
         $supported_file = array(
-                'gif',
+           		'gif',
                 'jpg',
                 'jpeg',
                 'png'
-         );
+        );
 
         $image = $files[$i];
-        //print $image ."<br>";
-        global $link;
-    	include("dbconnect.php");
-    	$link = new mysqli($server,$user,$password,$dbname);
-    	//if ($link->connect_errno) {
-    	//	die("Connection failed: " . $mylink->connect_error);
-		//} else {
-		//	print"Connection successful.";
-		//}
+
 		$path = substr($image,8);
-		//echo $path;
-		$q = "SELECT name, email FROM meme_information WHERE image_path= \"$path\"";
+
+		echo '<img src="'.$image.'" style="width:400px;height:400px;"></img>';
+
+		$q = "SELECT name, email, id FROM meme_information WHERE image_path= \"$path\"";
 		
+		$id = 0;
 		$result = $link->query($q);
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
 				echo "Name: ". $row["name"] ."<br>";
     			echo "Email: ". $row["email"] ."<br>";
+    			echo "Id: ". $row["id"] . "<br>";
+    			$id = $row["id"];
+
+    			echo '<img onclick="myFunction('.$id.')" src="heart-unclicked.png" style="width:50px;height:50px;">like</img>';
     		}
     	}
-    	echo '<img src="'.$image.'" style="width:400px;height:400px;"></img>';
     	
-		
-    	echo '<img onclick="myFunction()" src="heart-unclicked.png" style="width:50px;height:50px;">like</img>';
-    	// echo '<script>
-//     		function helloooo() {
-//     		alert("Heart was clicked");
-//     		}
-//     		</script>';
+    	//echo '<img onclick="myFunction()" src="heart-unclicked.png" style="width:50px;height:50px;">like</img>';
 
-		echo '<script>
-				function myFunction() {
+    	//echo "random" . $_POST['id']. "<br>";
+
+		echo
+		    '<script>
+				function myFunction(id) {
 					$.ajax({
 						type: "POST",
-						data: { name: $("select[image_path="$path"]").val()},
-						success:function( msg ) {
-							alert("Data Saved: " + msg);
-						}
+						url: "update_likes.php",
+						data: {"increment_by": 1,"id": id},
+						success: function() {
+							alert("works");
+						},
+						error: function() {
+							alert("doesnt work");
+						},
 					});
 				}
-			  </script>';
-		
-		
-    	$q2 = "UPDATE meme_information SET likes=likes+1 WHERE image_path= \"$path\" ";
-    	//$result = $link->query($q2);
-    	
-    	
-    		  
-    	
-    	echo $path;
-    	
+			</script>';	  
     }
     	    		    
 ?>
