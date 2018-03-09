@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -63,17 +64,30 @@
 		if ($result->num_rows > 0) {
 			while($row = $result->fetch_assoc()) {
 				$id = $row["id"];
+				$imgid = "image_" . $row["id"];
 				echo '<div class = "container">
 						<div class = "row">
-							<div class = "col-md-12">
-								<img id="'.$id.'" onclick="myFunction('.$id.')" src="heart-unclicked.png" style="width:50px;height:50px;align:right; position: relative; left: 150px;"></img>
-
-				
-    			<a href="mailto:" ' .$row["email"]. '  "?Subject=Hello%20I%20Love%20Your%20Meme" target="_top">
-    			<img src="email_icon.png" style="width:50px;height:40px;align:right;position: relative;">
-    			</a>';
+							<div class = "col-md-6 col-md-offset-3" style="padding-top:1%; margin-bottom:-1%;">
+							
+								<div class="col-md-6">
+    								<a href="mailto:"'.$row["email"].'"?Subject=Hello%20I%20Love%20Your%20Meme" target="_top">
+    								<img src="email_icon.png" style="width:50px;height:40px;">
+    								</a>
+    							</div>
+    							
+    							<div class="col-md-2">
+    								<p id="'.$id.'" class="like" style="align: right;position: relative; left: 150px;font-size:1.5em;">' .$row["likes"] .' </p>";
+    							</div>
+    							
+								<div class="col-md-4">
+									<img id="'.$imgid.'" onclick="myFunction('.$id.',)" src="heart-unclicked.png" style="width:50px;height:50px;align:right;">
+								</div>
+								
+    						</div>
+    					</div>
+    				</div>';
     			
-    			echo "<p style=\"align: right;position: relative; left: 150px;\">".$row["likes"]."</p>";
+    			
 				echo "<p> Name: ". $row["name"] ."</p>";
     			echo "<p> Email: ". $row["email"] ."</p>";
     			
@@ -87,13 +101,14 @@
     			
     			
     			echo ' <script>
-				function myFunction(id) {
+				function myFunction(id, imgid) {
 					$.ajax({
 						type: "POST",
 						url: "update_likes.php",
-						data: {"increment_by": 1,"id": id},
+						data: {"increment_by": 1,"id": id, "imgid": imgid},
 						success: function() {
-						document.getElementById(id).src="heart-clicked.png";
+							document.getElementById(imgid).src="heart-clicked.png";
+							document.getElementById(id).innerHTML++;
 						},
 						error: function() {
 							alert("doesnt work");
